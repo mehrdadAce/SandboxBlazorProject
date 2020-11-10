@@ -1,0 +1,32 @@
+﻿@page "/employees"
+@inject SandboxBlazorGit.Data.IEmployeeService EmployeeService
+
+<h3>All Employees</h3>
+<br />
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in employees)
+        {
+            <tr>
+                <td>@employee.Id</td>
+                <td>@employee.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {      
+    private List<SandboxBlazorGit.Data.Employee> employees;
+
+    protected override void OnInitialized()
+    {
+        employees = EmployeeService.GetEmployees();
+    }
+}
