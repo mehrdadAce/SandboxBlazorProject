@@ -1,0 +1,45 @@
+﻿@page "/employee/{id}"
+@inject SandboxBlazorGit.Data.IEmployeeService EmployeeService
+@inject NavigationManager Navigation
+
+<h3>Edit Employee</h3>
+
+
+<EditForm Model="employee" OnSubmit="@SubmitForm">
+    <div class="form-group">
+        <label>Id</label>
+        <input id="id" name="id" class="form-control" value="@employee.Id" readonly />
+    </div>
+    <div class="form-group">
+        <label>Name</label>
+        <InputText id="name" name="name" class="form-control" @bind-Value="employee.Name"></InputText>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</EditForm>
+ 
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private SandboxBlazorGit.Data.Employee employee { get; set; }
+
+    protected override void OnInitialized()
+    {
+        employee = EmployeeService.GetEmployee(Guid.Parse(Id));
+    }
+
+    private void SubmitForm()
+    {
+        bool succeeded = EmployeeService.UpdateEmployee(employee);
+        if (succeeded)
+        {
+            Navigation.NavigateTo("employees");
+        }
+        else
+        {
+            Navigation.NavigateTo($"employee/{employee.Id}");
+        }
+    }
+}
